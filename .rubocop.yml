@@ -1,0 +1,24 @@
+Style/ConditionalAssignment:
+  Enabled: false
+
+Layout/IndentFirstArrayElement:
+  Enabled: false
+
+Style/ClassVars:
+  Exclude:
+    - lib/**/block.rb
+Metrics/AbcSize:
+  Exclude: 
+    - lib/**/formatter.rb
+    - lib/**/data_formatter.rb
+Metrics/MethodLength:
+  Max: 35 
+Metrics/LineLength:
+  Max: 120
+  Exclude:
+    - test/**/*
+Layout/ElseAlignment:
+  Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - '*.gemspec' 

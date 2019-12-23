@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby -W0
+# frozen_string_literal: true
+
+require 'tfw'
+TFW.cli ARGV
