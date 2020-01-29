@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    #spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
+    # spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
 
     spec.metadata['homepage_uri'] = spec.homepage
   else
@@ -35,9 +35,12 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'tfdsl', '~> 0.1'
+  spec.add_dependency 'tfdsl', '0.1.2'
 
   spec.add_development_dependency 'bundler', '~> 1.17'
+  spec.add_development_dependency 'coveralls', '~> 0.8'
   spec.add_development_dependency 'minitest', '~> 5.0'
+  spec.add_development_dependency 'pry', '~> 0.12'
   spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rubocop', '~> 0.79'
 end
