@@ -1,3 +1,6 @@
+Style/SpecialGlobalVars:
+  Enabled: false
+
 Style/ConditionalAssignment:
   Enabled: false
 

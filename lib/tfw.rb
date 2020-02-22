@@ -30,17 +30,38 @@ module TFW
   end
 
   def cli(args)
-    stack = TFW.get_stack_for_dir '.'
+    build_config
+    run_terraform args
+  end
 
+  def build_config
+    FileUtils.mkdir_p WORKSPACE
+    stack = TFW.get_stack_for_dir '.'
     stack_file = "#{WORKSPACE}/stack.tf"
     write_stack_file stack_file, stack
+  end
 
+  def run_terraform(args)
     old_dir = Dir.pwd
     Dir.chdir WORKSPACE
 
     cmd = "terraform #{args.join ' '}"
-    Process.wait(fork { exec cmd })
+    pid = fork { exec cmd }
     Dir.chdir old_dir
+    trap_pids [pid]
+    Process.wait pid
+    $?.exitstatus
+  end
+
+  def trap_pids(pids)
+    %w[SIGINT SIGTERM].each do |sig|
+      Signal.trap sig do
+        pids.each { |pid| Process.kill sig, pid }
+        Process.waitall
+        puts "ERROR: TFW received and forwarded #{sig} to terraform"
+        exit 2
+      end
+    end
   end
 
   def load_module(stack, &block)

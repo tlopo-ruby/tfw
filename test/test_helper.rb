@@ -10,7 +10,13 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   Coveralls::SimpleCov::Formatter
 ])
 
-SimpleCov.minimum_coverage 95
+# Use simplecov with forking specs
+pid = Process.pid
+SimpleCov.at_exit do
+  SimpleCov.result.format! if Process.pid == pid
+end
+
+SimpleCov.minimum_coverage 90
 SimpleCov.start
 
 require 'tfw'
