@@ -8,7 +8,7 @@ require_relative 'tfw/state'
 
 %w[provider variable locals tfmodule datsource resource output terraform].each do |name|
   define_method name do |*args, &block|
-    Object.const_get('State').instance.stack.resource(*args, &block)
+    State.instance.stack.method(name).call(*args, &block)
   end
 end
 
