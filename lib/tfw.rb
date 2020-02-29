@@ -32,7 +32,7 @@ module TFW
     files = Dir.glob "#{dir}/*.rb"
     State.instance.stack do
       instance_variable_set '@_input', input
-      files.sort.each { |f| instance_eval File.read(f), f }
+      files.sort.each { |f| load f }
     end
     State.instance.stack
   end
