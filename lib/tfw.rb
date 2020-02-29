@@ -3,6 +3,14 @@
 require 'tfw/version'
 require 'tfdsl'
 require 'json'
+require 'singleton'
+require_relative 'tfw/state'
+
+%w[provider variable locals tfmodule datsource resource output terraform].each do |name|
+  define_method name do |*args, &block|
+    Object.const_get('State').instance.stack.resource(*args, &block)
+  end
+end
 
 # TFW is a Terraform Wrapper which uses terraform DSL for Ruby
 module TFW
@@ -22,15 +30,16 @@ module TFW
 
   def get_stack_for_dir(dir, input = nil)
     files = Dir.glob "#{dir}/*.rb"
-    stack = TFDSL.stack do
+    State.instance.stack do
       instance_variable_set '@_input', input
       files.sort.each { |f| instance_eval File.read(f), f }
     end
-    stack
+    State.instance.stack
   end
 
   def cli(args)
     build_config
+    State.instance.reset
     run_terraform args
   end
 
