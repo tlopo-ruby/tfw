@@ -6,12 +6,6 @@ require 'json'
 require 'singleton'
 require_relative 'tfw/state'
 
-%w[provider variable locals tfmodule datsource resource output terraform].each do |name|
-  define_method name do |*args, &block|
-    State.instance.stack.method(name).call(*args, &block)
-  end
-end
-
 # TFW is a Terraform Wrapper which uses terraform DSL for Ruby
 module TFW
   module_function
@@ -28,13 +22,14 @@ module TFW
     !ENV['TFW_AS_JSON'].nil?
   end
 
-  def get_stack_for_dir(dir, input = nil)
+  def get_stack_for_dir(dir, input = nil, stack = State.instance.stack)
+    configure_methods_using_stack stack
+    configure_input_method input
+
     files = Dir.glob "#{dir}/*.rb"
-    State.instance.stack do
-      instance_variable_set '@_input', input
-      files.sort.each { |f| load f }
-    end
-    State.instance.stack
+    files.sort.each { |f| load f }
+    configure_methods_using_stack State.instance.stack
+    stack
   end
 
   def cli(args)
@@ -101,6 +96,18 @@ module TFW
     else
       File.write stack_file, stack
     end
+  end
+
+  def configure_methods_using_stack(stack)
+    %w[provider variable locals tfmodule datsource resource output terraform].each do |name|
+      TOPLEVEL_BINDING.eval('self').define_singleton_method name do |*args, &block|
+        stack.method(name).call(*args, &block)
+      end
+    end
+  end
+
+  def configure_input_method(input)
+    TOPLEVEL_BINDING.eval('self').define_singleton_method('tfw_module_input') { input }
   end
 
   def pretty_json(json)
