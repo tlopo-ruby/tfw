@@ -20,4 +20,6 @@ Dir.chdir old_dir
 
 files.each { |f| require f }
 
-Minitest.run ['-vp']
+success = Minitest.run ['-vp']
+
+exit 1 unless success

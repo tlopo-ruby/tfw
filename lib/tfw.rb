@@ -99,19 +99,35 @@ module TFW
   end
 
   def configure_methods_using_stack(stack)
-    %w[provider variable locals tfmodule datsource resource output terraform].each do |name|
-      TOPLEVEL_BINDING.eval('self').define_singleton_method name do |*args, &block|
-        stack.method(name).call(*args, &block)
+    silent_block do
+      # This will trigger warnings as we are redefining methods
+      %w[provider variable locals tfmodule datsource resource output terraform].each do |name|
+        TOPLEVEL_BINDING.eval('self').define_singleton_method name do |*args, &block|
+          stack.method(name).call(*args, &block)
+        end
       end
     end
   end
 
   def configure_input_method(input)
-    TOPLEVEL_BINDING.eval('self').define_singleton_method('tfw_module_input') { input }
+    silent_block do
+      # This will trigger warnings as we are redefining methods
+      TOPLEVEL_BINDING.eval('self').define_singleton_method('tfw_module_input') { input }
+    end
   end
 
   def pretty_json(json)
     JSON.pretty_generate JSON.parse(json)
+  end
+end
+
+def silent_block
+  stderr, stdout = [STDERR, STDOUT].map(&:clone)
+  [STDERR, STDOUT].each { |e| e.reopen File.new('/dev/null', 'w') }
+  begin
+    yield
+  ensure
+    { STDERR => stderr, STDOUT => stdout }.each { |k, v| k.reopen v }
   end
 end
 
