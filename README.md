@@ -59,3 +59,11 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 TFW will create a subdirectory called `.tfw`, and it will create a file called `.tfw/stack.tf` which is the dynamically generated terraform file, and will invoke terrafom in that directory. 
 
 
+## Installation
+
+
+TFW is just a ruby gem and can easily be installed as below: 
+
+```bash
+gem install tfw
+```
