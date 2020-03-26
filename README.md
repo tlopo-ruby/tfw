@@ -1,43 +1,61 @@
-# Tfw
+# TFW - Terraform Wrapper
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/tfw`. To experiment with that code, run `bin/console` for an interactive prompt.
+Terraform Wrapper writes terraform configuration using TFDSL (Terraform DSL for Ruby) and invokes the terraform binary. 
 
-TODO: Delete this and the text above, and describe your gem
+## Motivation (Short Version)
 
-## Installation
+Terraform is an excellent tool, but it lacks funcionalities like Loops and Conditionals, actually since version 0.12+ it has loops as meta-arguments which is a hacky implementation in my humble opinion. 
 
-Add this line to your application's Gemfile:
+For years I was templating terraform configuration with ERB / Jinja, that's reasonable way to avoid repetition in terraform but it's not very flexible nor reusable. 
 
+The solution was writing a tool which mimics terraform usage but writes configuration in plain Ruby. 
+
+
+## Usage:
+
+1. let's create a file called `foo.rb`
 ```ruby
-gem 'tfw'
+resource 'local_file', 'foo' do 
+  content 'foo'
+  filename '/tmp/foo.txt'
+end
 ```
 
-And then execute:
+2. Just like in terrraform, run init and apply
+```
+$ tfw init && tfw apply
+... <omitted output>
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  + create
 
-    $ bundle
+Terraform will perform the following actions:
 
-Or install it yourself as:
+  # local_file.foo will be created
+  + resource "local_file" "foo" {
+      + content              = "foo"
+      + directory_permission = "0777"
+      + file_permission      = "0777"
+      + filename             = "/tmp/foo.txt"
+      + id                   = (known after apply)
+    }
 
-    $ gem install tfw
+Plan: 1 to add, 0 to change, 0 to destroy.
 
-## Usage
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-TODO: Write usage instructions here
+  Enter a value: yes
 
-## Development
+local_file.foo: Creating...
+local_file.foo: Creation complete after 0s [id=0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33]
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+## How it works
 
-## Contributing
+TFW will create a subdirectory called `.tfw`, and it will create a file called `.tfw/stack.tf` which is the dynamically generated terraform file, and will invoke terrafom in that directory. 
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/tfw. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Tfw project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/tfw/blob/master/CODE_OF_CONDUCT.md).
