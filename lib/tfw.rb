@@ -101,7 +101,7 @@ module TFW
   def configure_methods_using_stack(stack)
     silent_block do
       # This will trigger warnings as we are redefining methods
-      %w[provider variable locals tfmodule datsource resource output terraform].each do |name|
+      %w[provider variable locals tfmodule datasource resource output terraform].each do |name|
         TOPLEVEL_BINDING.eval('self').define_singleton_method name do |*args, &block|
           stack.method(name).call(*args, &block)
         end
