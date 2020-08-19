@@ -14,6 +14,7 @@ module TFW
 
   require "#{LIB_DIR}/setters"
   require "#{LIB_DIR}/module"
+  require "#{LIB_DIR}/aws_sg_workaround"
 
   WORKSPACE = './.tfw'
   FileUtils.mkdir_p WORKSPACE
@@ -92,7 +93,7 @@ module TFW
 
     if as_json?
       stack_file = "#{stack_file}.json"
-      File.write stack_file, pretty_json(stack.to_json)
+      File.write stack_file, pretty_json(AwsSgWorkaround.fix(stack.to_json))
     else
       File.write stack_file, stack
     end
