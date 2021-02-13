@@ -14,6 +14,7 @@ module TFW
 
   require "#{LIB_DIR}/setters"
   require "#{LIB_DIR}/module"
+  require "#{LIB_DIR}/stack_methods"
   require "#{LIB_DIR}/aws_sg_workaround"
 
   WORKSPACE = './.tfw'
