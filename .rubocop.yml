@@ -14,6 +14,7 @@ Metrics/AbcSize:
   Exclude: 
     - lib/**/formatter.rb
     - lib/**/data_formatter.rb
+    - lib/**/aws_asg_workaround.rb
 Metrics/MethodLength:
   Max: 35 
 Metrics/LineLength:

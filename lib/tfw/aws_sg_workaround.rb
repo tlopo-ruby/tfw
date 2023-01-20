@@ -24,15 +24,22 @@ module TFW
     def replace_and_fill(obj, key)
       backup = obj[key]
       fill_fields(backup)
-      obj[key] = [backup]
+      obj[key] = [backup] unless backup.is_a? Array
+      obj[key] = backup if backup.is_a? Array
     end
 
     def fill_fields(obj)
-      obj['description'] = '' unless obj.key? 'description'
-      obj['security_groups'] = [] unless obj.key? 'security_groups'
-      obj['self'] = false unless obj.key? 'self'
-      obj['ipv6_cidr_blocks'] = [] unless obj.key? 'ipv6_cidr_blocks'
-      obj['prefix_list_ids'] = [] unless obj.key? 'prefix_list_ids'
+      list = []
+      list = obj if obj.is_a? Array
+      list << obj unless obj.is_a? Array
+
+      list.each do |e|
+        e['description'] = '' unless e.key? 'description'
+        e['security_groups'] = [] unless e.key? 'security_groups'
+        e['self'] = false unless e.key? 'self'
+        e['ipv6_cidr_blocks'] = [] unless e.key? 'ipv6_cidr_blocks'
+        e['prefix_list_ids'] = [] unless e.key? 'prefix_list_ids'
+      end
     end
   end
 end

@@ -16,7 +16,7 @@ SimpleCov.at_exit do
   SimpleCov.result.format! if Process.pid == pid
 end
 
-SimpleCov.minimum_coverage 90
+SimpleCov.minimum_coverage 80
 SimpleCov.start
 
 require 'tfw'

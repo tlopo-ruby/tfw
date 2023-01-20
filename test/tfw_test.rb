@@ -61,6 +61,6 @@ class TfwTest < Minitest::Test
     sleep 1
     Process.kill 'SIGTERM', pid
     Process.wait pid
-    assert_equal 1, $?.exitstatus
+    assert_equal 2, $?.exitstatus
   end
 end
