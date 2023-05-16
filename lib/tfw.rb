@@ -4,6 +4,7 @@ require 'tfw/version'
 require 'tfdsl'
 require 'json'
 require 'singleton'
+require 'fileutils'
 require_relative 'tfw/state'
 
 # TFW is a Terraform Wrapper which uses terraform DSL for Ruby
