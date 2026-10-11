@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tfw (0.1.19)
+    tfw (0.2.0)
       tfdsl (= 0.2.0)
 
 GEM
